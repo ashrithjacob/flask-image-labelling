@@ -5,10 +5,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 <body>
-<p><h1 align="center">Python Flask Upload and display image</h1></p>
+<p><h1 align="center">Upload and label images</h1></p>
 <div class="container">
 <div class="row">
-    <h2>Select a file to upload</h2>
+    <h3>Select file(s) to upload</h3>
     <p>
         {% with messages = get_flashed_messages() %}
           {% if messages %}
@@ -20,15 +20,6 @@
           {% endif %}
         {% endwith %}
     </p>
-    <form method="post" action="/">
-        <input type="submit" name="submit_button" value="<<">
-        <input type="submit" name="submit_button" value=">>">
-    </form>
-    {% if filename %}
-        <div>
-            <img src="{{ url_for('display_image', filename=filename) }}">
-        </div>
-    {% endif %}
     <form method="post" action="/" enctype="multipart/form-data">
         <dl>
             <p>
@@ -39,6 +30,41 @@
             <input type="submit" value="Submit" class="btn btn-info">
         </p>
     </form>
+</div>
+<div class="create labels">
+    <h3>Select labels to add</h3>
+    <form method="POST" action="{{ url_for('labels') }}">
+        <label> labels:</label>
+        <input type="text" name="labels">
+        <input type="submit" name="add labels" value="+">
+     </form>
+     <p> list of labels:</p>
+     <p> 
+        {% if label_list %}
+        <ol>
+            {% for i in label_list %}
+            <li>{{  i }}</li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+    </p>
+</div>
+<div class = "assign labels">
+     <form method="post" action="/toggle">
+        <input type="submit" name="submit_button" value="<<">
+        <input type="submit" name="submit_button" value=">>">
+    </form>
+    <label for="image labels">Choose a label:</label>
+    <select name="cars" id="cars" multiple>
+        {% for i in label_list %}
+        <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+    {% if filename %}
+        <div>
+            <img src="{{ url_for('display_image', filename=filename) }}">
+        </div>
+    {% endif %}
 </div>
 </div>
 </body>

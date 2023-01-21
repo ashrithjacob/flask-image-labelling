@@ -29,19 +29,6 @@ def home():
 
 
 @app.route("/", methods=["POST"])
-def toggle_images():
-    global item
-    flash("In_toggle")
-    files = listdir(UPLOAD_FOLDER)
-    if request.form.get("submit_button") == "<<":
-        item -= 1
-    elif request.form.get("submit_button") == ">>":
-        item += 1
-    i = item % len(files)
-    return render_template("base.html", filename=files[i])
-
-
-@app.route("/", methods=["POST"])
 def upload_image():
     flash("in upload_image")
     if request.method == "POST":
@@ -58,13 +45,46 @@ def upload_image():
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-                return toggle_images()
-                # return render_template("base.html", filename=filename)
-        # print('upload_image filename: ' + filename)
-        flash("Image(s) successfully uploaded")
+        p = "s" if len(files) > 1 else ""
+        flash(
+            str(len(files))
+            + " "
+            + "file"
+            + p
+            + " "
+            + "uploaded to uploads folder successfully"
+        )
+        return render_template("base.html", filename=filename)
     else:
         flash("Allowed image types are - png, jpg, jpeg, gif")
         return redirect(request.url)
+
+
+@app.route("/toggle", methods=["POST"])
+def toggle_images():
+    global item
+    flash("In_toggle")
+    files = listdir(UPLOAD_FOLDER)
+    if len(files) == 0:
+        flash("No images uploaded, please upload images for labelling")
+        return render_template("base.html")
+    else:
+        if request.form.get("submit_button") == "<<":
+            item -= 1
+        elif request.form.get("submit_button") == ">>":
+            item += 1
+        i = item % len(files)
+        return render_template("base.html", filename=files[i])
+
+
+@app.route("/labels", methods=["POST", "GET"])
+def labels():
+    global label_list
+    flash("in labels")
+    if request.method == "POST":
+        result = request.form.get("labels")
+        label_list.append(result)
+    return render_template('base.html', label_list=label_list)
 
 
 @app.route("/display/<filename>")
@@ -74,6 +94,7 @@ def display_image(filename):
 
 
 if __name__ == "__main__":
-    global item
+    global item, label_list
     item = 0
-    app.run()
+    label_list = []
+    app.run(debug=True)
