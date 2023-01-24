@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>Add labels to images</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />        
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+<p><h3 align="center">Use the << and >> to move between images, selecting labels for each image as you proceed</h3></p>
+<div class="container">
+    <p>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </p>
+<div class = "toggle">
+    <form method="post" action="{{ url_for('toggle_images') }}">
+        <input type="submit" name="submit_button" value="<<">
+        <input type="submit" name="submit_button" value=">>">
+    </form>
+    <form method="POST" action="{{ url_for('toggle_images') }}">
+    <label for="tags">Choose a label:</label>
+    <select name="tags" id="tags" action="{{ url_for('toggle_images') }}" multiple>
+        {% for i in label_list %}
+        <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-info">save</button>
+    </form>
+    {% if filename %}
+    <p> current list of labels for this image:</p>
+    <p> 
+        {% if filename in label_store %}
+        <ul>
+            {% for i in range(label_store[filename]|length) %}
+                {% if label_store[filename][i] == 1 %}
+            <li>{{  label_list[i] }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </p>
+        <div>
+            <img src="{{ url_for('display_image', filename=filename) }}" width ='600' height='500'>
+        </div>
+    {% endif %}
+    <div>
+        <form method="POST" action="{{ url_for('zip_labels') }}">
+            <input type="submit" name="submit_button" value="Download labels">
+        </form>
+    </div>
+</div>
+</div>
+</body>
+</html>

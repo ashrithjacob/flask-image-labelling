@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Python Flask Upload and display image</title>
+<title>Upload images and add labels</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />        
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
@@ -34,11 +34,9 @@
 <div class="create labels">
     <h3>Select labels to add</h3>
     <form method="POST" action="{{ url_for('labels') }}">
-        <label> labels:</label>
         <input type="text" name="labels">
-        <input type="submit" name="add labels" value="+">
      </form>
-     <p> list of labels:</p>
+     <p> current list of labels:</p>
      <p> 
         {% if label_list %}
         <ol>
@@ -48,23 +46,9 @@
         </ol>
         {% endif %}
     </p>
-</div>
-<div class = "assign labels">
-     <form method="post" action="/toggle">
-        <input type="submit" name="submit_button" value="<<">
-        <input type="submit" name="submit_button" value=">>">
+    <form method="POST" action="{{ url_for('labels') }}">
+        <input type="submit" name="save" value="Save labels" class="btn btn-info">
     </form>
-    <label for="image labels">Choose a label:</label>
-    <select name="cars" id="cars" multiple>
-        {% for i in label_list %}
-        <option value="{{ i }}">{{ i }}</option>
-        {% endfor %}
-    </select>
-    {% if filename %}
-        <div>
-            <img src="{{ url_for('display_image', filename=filename) }}">
-        </div>
-    {% endif %}
 </div>
 </div>
 </body>
