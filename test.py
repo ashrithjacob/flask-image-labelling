@@ -16,6 +16,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
+STATIC_FOLDER = "static/"
 UPLOAD_FOLDER = "static/uploads/"
 app.secret_key = "Holdon@123"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -240,5 +241,9 @@ if __name__ == "__main__":
     item = 0
     label_list = []
     label_store = {}
+    if not os.path.exists(STATIC_FOLDER):
+        os.mkdir(STATIC_FOLDER)
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.mkdir(UPLOAD_FOLDER)
     files = listdir(UPLOAD_FOLDER)
     app.run(debug=True)
