@@ -114,7 +114,7 @@ def zip_csv():
         flash(file_name)
         flash(label_store[file])
     os.chdir("../")
-    shutil.make_archive("labels_zipped", "zip", "labels")
+    shutil.make_archive("labels_y", "zip", "labels")
     flash("zip of labels created in " + str(os.getcwd()))
     files_csv = listdir("labels")
     os.chdir("labels")
