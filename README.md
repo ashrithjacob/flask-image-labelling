@@ -2,6 +2,10 @@
 
 Creating a simple UI to label images
 
+# Running application:
+To run simply run the `test.py` file
+To store image data fro labelling, create a folder `static/uploads` in current directory and store image data there.
+
 # TODO:
 
 1. Feature to drag and drop images ("/" )
